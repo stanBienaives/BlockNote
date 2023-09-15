@@ -1,88 +1,60 @@
 <template>
-    <div class="side-menu" ref="sidemenu" :style="elementStyle" v-show="showElement">
-      <div class='button' @click="addBlock"><PlusIcon/></div>
-      <div class='button' draggable="true" @dragstart="blockDragStart" @dragend="blockDragEnd">
+    <div class="side-menu" ref="sidemenu" v-show="showElement">
+        <div class='button' @click="addBlock"><PlusIcon/></div>
+        <div class='button' draggable="true" @dragstart="blockDragStart" @dragend="blockDragEnd">
         <DragIcon />
-      </div>
+        </div>
     </div>
-  </template>
+</template>
   
-  <script lang="ts">
-  import { ref, onMounted, nextTick, StyleValue, CSSProperties } from 'vue';
-  import { BlockNoteEditor } from '@blocknote/core';
-  import DragIcon from './icons/dragIcon.vue';
-  import PlusIcon from './icons/PlusIcon.vue';
+<script setup lang="ts">
+import { ref, onMounted, computed} from 'vue';
+import type { BlockNoteEditor} from '@blocknote/core';
+import type { DeepReadonly } from 'vue';
+import DragIcon from './icons/dragIcon.vue';
+import PlusIcon from './icons/PlusIcon.vue';
 
 
-  type TSideMenuProps = {
-    editor: BlockNoteEditor
-  }
-  
-  const sideMenuComponent : any = {
-    components: {
-      DragIcon,
-      PlusIcon,
-    },
-    props: {
-      editor: {
-        type: Object as () => BlockNoteEditor,
-        required: true
-      }
-    },
-    setup(props : TSideMenuProps) {
-      const elementStyle = ref<CSSProperties>({
-        // display: 'none'
-      });
-      const showElement = ref(false);
-      const sidemenu = ref<HTMLElement | null>(null);
-      
-      onMounted(() => {
-        props.editor.sideMenu.onUpdate((sideMenuState : any) => {
-          if (sideMenuState.show) {
-            showElement.value = true;
-            const top = sideMenuState.referencePos.top;
-            const left = sideMenuState.referencePos.x -  sidemenu.value!.offsetWidth;
+type TSideMenuProps = {
+    // DeepReadonly is giving me reason to hate typescript and vue
+    editor: DeepReadonly<BlockNoteEditor>
+}
 
-            
-            elementStyle.value = {
-              ...elementStyle.value,
-              top: `${top}px`,
-              left: `${left}px`
-            };
-          } else {
-            showElement.value = false;
-          }
-        });
-      });
-  
-      const addBlock = () => {
-        console.log('click')
-        props.editor.sideMenu.addBlock();
-      };
-  
-      const blockDragStart = (event: DragEvent) => {
-        props.editor.sideMenu.blockDragStart(event);
-      };
-  
-      const blockDragEnd = (event: DragEvent) => {
-        props.editor.sideMenu.blockDragEnd();
-      };
-  
-      return {
-        elementStyle,
-        showElement,
-        addBlock,
-        blockDragStart,
-        blockDragEnd,
-        sidemenu
-      };
-    }
-  };
+const {editor} = defineProps<TSideMenuProps>();
+const showElement = ref(false);
+const sidemenu = ref<HTMLElement | null>(null);
+const top = ref(0);
+const left = ref(0);
+const topPx = computed(() => `${top.value}px`);
+const leftPx = computed(() => `${left.value}px`);
 
-  export default sideMenuComponent;
-  </script>
+onMounted(() => {
+    editor.sideMenu.onUpdate((sideMenuState) => {
+        if (sideMenuState.show) {
+        showElement.value = true;
+        top.value = sideMenuState.referencePos.top;
+        left.value = sideMenuState.referencePos.x -  sidemenu.value!.offsetWidth;
+        
+        } else {
+        showElement.value = false;
+        }
+    });
+});
+
+const addBlock = () => {
+    editor.sideMenu.addBlock();
+};
+
+const blockDragStart = (event: DragEvent) => {
+    editor.sideMenu.blockDragStart(event);
+};
+
+const blockDragEnd = (event: DragEvent) => {
+    editor.sideMenu.blockDragEnd();
+};
+</script>
   
-  <style>
+<style scoped>
 
 .side-menu {
     position: absolute;
@@ -93,7 +65,9 @@
     justify-content: space-between;
     align-items: center;
     cursor: pointer;
-
+    z-index: 100;
+    top: v-bind(topPx);
+    left: v-bind(leftPx);
 }
 
 
@@ -102,7 +76,6 @@
     width: 30px;
     height: 30px;
     border-radius: 5px;
-    z-index: 100;
     /* display: block;
     width: 30px;
     padding: 0px; */

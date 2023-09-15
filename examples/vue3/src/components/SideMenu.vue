@@ -21,6 +21,7 @@ type TSideMenuProps = {
 }
 
 const {editor} = defineProps<TSideMenuProps>();
+
 const showElement = ref(false);
 const sidemenu = ref<HTMLElement | null>(null);
 const top = ref(0);

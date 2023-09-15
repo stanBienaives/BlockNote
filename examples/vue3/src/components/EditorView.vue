@@ -1,6 +1,7 @@
 <template>
     <div id="root" ref="root" class="container-editor">
       <SideMenu v-if="editor" :editor="editor"/>
+      <FormattingToolbar v-if="editor" :editor="editor"/>
     </div>
     <div >
       {{  html }}
@@ -11,9 +12,10 @@
 </template>
   
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
-import { Block, BlockNoteEditor} from "@blocknote/core";
+import { ref, onMounted , markRaw} from 'vue';
+import { Block, BlockNoteEditor, FormattingToolbarView} from "@blocknote/core";
 import SideMenu from './SideMenu.vue';
+import FormattingToolbar from './FormattingToolbar.vue';
 
 const root = ref(null);
 const blocks = ref<Block[]>();
@@ -21,7 +23,7 @@ const editor = ref<BlockNoteEditor | null>(null);
 const html = ref<string>("");
 onMounted(() => {
   if (root.value)
-    editor.value  = new BlockNoteEditor({
+    editor.value  = markRaw(new BlockNoteEditor({
       parentElement: root.value,
       onEditorContentChange: async (editor) => {
           blocks.value = editor.topLevelBlocks;
@@ -32,19 +34,18 @@ onMounted(() => {
               class: "editor",
           },
       },
-    });
+    }));
 });
 </script>
 
 <style>
 .editor-container {
   position: relative;
-  /* margin: 100px; */
-  
 }
 
 
 #root {
+  margin-top: 100px;
   height: 100%;
 }
 

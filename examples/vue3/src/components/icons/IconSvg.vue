@@ -16,7 +16,7 @@ import { computed} from 'vue'
 import * as icons from './icons'
 
 const {identifier} = defineProps<{
-    identifier: keyof typeof icons
+    identifier: icons.IconNames
 }>()
 
 const path = computed(() => icons[identifier])

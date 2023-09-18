@@ -35,8 +35,7 @@ onMounted(() => {
         showElement.value = true;
         top.value = sideMenuState.referencePos.top;
         left.value = sideMenuState.referencePos.left -  sidemenu.value!.offsetWidth;
-        console.log(sideMenuState.referencePos)
-        console.log(sidemenu.value!.offsetWidth)
+        // TODO: use referencePos.height to position the menu in the middle of the block
         } else {
         showElement.value = false;
         }
@@ -59,7 +58,7 @@ const blockDragEnd = (event: DragEvent) => {
 <style scoped>
 
 .side-menu {
-    position: absolute;
+    position: fixed;
     opacity: 0.7;
     display: flex;
     flex-direction: row;

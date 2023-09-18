@@ -11,9 +11,9 @@
       >
         <!-- <SideMenu v-if="editor" :editor="editor"/>
         <FormattingToolbar v-if="editor" :editor="editor"/> -->
-        <div> cokok</div>
         <SideMenu v-if="editor" :editor="editor"/>
         <FormattingToolbar v-if="editor" :editor="editor"/>
+        <SlashMenu v-if="editor" :editor="editor"/>
       </EditorContent>
     </div>
     <div >
@@ -29,6 +29,7 @@ import { ref, onMounted , markRaw} from 'vue';
 import { Block, BlockNoteEditor, FormattingToolbarView} from "@blocknote/core";
 import SideMenu from './SideMenu.vue';
 import FormattingToolbar from './FormattingToolbar.vue';
+import SlashMenu from './SlashMenu.vue';
 // import { EditorContent, Editor } from '@tiptap/vue-3'
 import { EditorContentWithSlots as EditorContent } from './EditorContentWithSlots';
 import { useBlockNote } from '../hooks/useBlockNote'
@@ -44,13 +45,13 @@ onMounted(() => {
 
 <style>
 .editor-container {
-  position: relative;
 }
 
 
 #root {
   margin-top: 100px;
-  height: 100%;
+  position: relative;
+  /* height: 100%; */
 }
 
 .editor {

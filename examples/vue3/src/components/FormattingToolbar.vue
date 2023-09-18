@@ -78,7 +78,7 @@ onMounted(() => {
   
 <style scope>
 .formatting-menu {
-  position: absolute;
+  position: fixed;
   z-index: 200;
   box-sizing: border-box;
   display: flex;

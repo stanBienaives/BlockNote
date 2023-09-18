@@ -33,7 +33,7 @@ onMounted(() => {
     editor.sideMenu.onUpdate((sideMenuState) => {
         if (sideMenuState.show) {
         showElement.value = true;
-        top.value = sideMenuState.referencePos.top;
+        top.value = sideMenuState.referencePos.top + sideMenuState.referencePos.height / 2 - 30 / 2; // sidemenu.value!.offsetHeight = 30;
         left.value = sideMenuState.referencePos.left -  sidemenu.value!.offsetWidth;
         // TODO: use referencePos.height to position the menu in the middle of the block
         } else {
@@ -50,7 +50,7 @@ const blockDragStart = (event: DragEvent) => {
     editor.sideMenu.blockDragStart(event);
 };
 
-const blockDragEnd = (event: DragEvent) => {
+const blockDragEnd = () => {
     editor.sideMenu.blockDragEnd();
 };
 </script>

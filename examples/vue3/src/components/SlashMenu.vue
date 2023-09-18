@@ -1,14 +1,6 @@
 <template>
     <div class="slash-menu" ref="slashmenu" :class="{ 'fake-hide': !showElement}">
-        <!-- <SlashMenuItem icon="h1" name="Titre 1" description="Utiliser pour les titres principaux"/>
-        <SlashMenuItem icon="h2" name="Titre 2" description="Utiliser pour les sections intermédiaires"/>
-        <SlashMenuItem icon="h3" name="Titre 3" description="Utiliser pour les sous groupes"/>
-        <div>
-            {{  filteredItems }}
-        </div> -->
         <SlashMenuItem v-for="(item, index) in items" :key="index" :icon="item.icon" :name="item.name" :description="item.description" :selected="selected == index"/>
-        <!-- <SlashMenuItem icon="bold" name="Bold" description="Make text bold"/> -->
-        <!-- <SlashMenuItem icon="bold" name="Bold" description="Make text bold"/> -->
     </div>
 </template>
 
@@ -20,7 +12,6 @@ import SlashMenuItem from './SlashMenuItem.vue';
 import { IconNames } from './icons/icons';
 import {
   BaseSlashMenuItem,
-//   BlockNoteEditor,
   DefaultBlockSchema,
 } from "@blocknote/core";
 type TSlashMenuProps = {

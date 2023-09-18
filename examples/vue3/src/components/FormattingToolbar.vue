@@ -1,5 +1,5 @@
 <template>
-  <div class="formatting-menu" ref="menu" v-show="true || showElement" > 
+  <div class="formatting-menu" ref="menu" v-show="showElement" > 
     <template v-if="!linkEditorOpen">
       <div class="button" @click.stop="() => setStyle('bold')">
         <IconSvg identifier="bold" />
@@ -26,6 +26,7 @@ import { ref, onMounted, computed} from 'vue';
 import IconSvg from './icons/IconSvg.vue';
 import type { BlockNoteEditor} from '@blocknote/core';
 import type { DeepReadonly } from 'vue';
+import { format } from 'path';
 
     
 type YFormattingMenuProps = {
@@ -49,6 +50,7 @@ const setStyle = (style: string) => {
   if (!editor)
     return;
   editor.toggleStyles({[style]: true})
+  showElement.value = false;
 };
 
 const setLink = () => {
@@ -60,13 +62,15 @@ const setLink = () => {
 
 onMounted(() => {
   editor.formattingToolbar.onUpdate((formattingToolbar) => {
+    console.log(formattingToolbar.show)
     if (formattingToolbar.show) {
       showElement.value = true;
       top.value = formattingToolbar.referencePos.top - 40;
       left.value = formattingToolbar.referencePos.x;
       
     } else {
-      showElement.value = false;
+      // Use settimeout to fix Some race condition: FormattingToolbarView disappear before applying style
+      setTimeout(() => showElement.value = false, 100)
     }
   });
 });

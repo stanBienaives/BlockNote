@@ -1,7 +1,20 @@
 <template>
-    <div id="root" ref="root" class="container-editor">
+    <!-- <div id="root" ref="root" class="container-editor">
+    
       <SideMenu v-if="editor" :editor="editor"/>
       <FormattingToolbar v-if="editor" :editor="editor"/>
+    </div> -->
+    <div> coucou </div>
+    <!-- <div> {{ editor?._tiptapEditor  }}</div> -->
+    <div id="root" ref="root" class="container-editor">
+      <EditorContent class="editor" v-if="editor" :editor="(editor._tiptapEditor as typeof editor._tiptapEditor)" 
+      >
+        <!-- <SideMenu v-if="editor" :editor="editor"/>
+        <FormattingToolbar v-if="editor" :editor="editor"/> -->
+        <div> cokok</div>
+        <SideMenu v-if="editor" :editor="editor"/>
+        <FormattingToolbar v-if="editor" :editor="editor"/>
+      </EditorContent>
     </div>
     <div >
       {{  html }}
@@ -16,25 +29,16 @@ import { ref, onMounted , markRaw} from 'vue';
 import { Block, BlockNoteEditor, FormattingToolbarView} from "@blocknote/core";
 import SideMenu from './SideMenu.vue';
 import FormattingToolbar from './FormattingToolbar.vue';
+// import { EditorContent, Editor } from '@tiptap/vue-3'
+import { EditorContentWithSlots as EditorContent } from './EditorContentWithSlots';
+import { useBlockNote } from '../hooks/useBlockNote'
 
 const root = ref(null);
 const blocks = ref<Block[]>();
 const editor = ref<BlockNoteEditor | null>(null);
 const html = ref<string>("");
 onMounted(() => {
-  if (root.value)
-    editor.value  = markRaw(new BlockNoteEditor({
-      parentElement: root.value,
-      onEditorContentChange: async (editor) => {
-          blocks.value = editor.topLevelBlocks;
-          html.value = await editor.blocksToHTML(blocks.value);
-      },
-      domAttributes: {
-          editor: {
-              class: "editor",
-          },
-      },
-    }));
+    editor.value = useBlockNote()!;
 });
 </script>
 

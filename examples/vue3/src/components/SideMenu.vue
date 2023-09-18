@@ -1,5 +1,5 @@
 <template>
-    <div class="side-menu" ref="sidemenu" v-show="showElement">
+    <div class="side-menu" ref="sidemenu" :class="{ 'fake-hide': !showElement}">
         <div class='button' @click="addBlock"><PlusIcon/></div>
         <div class='button' draggable="true" @dragstart="blockDragStart" @dragend="blockDragEnd">
         <DragIcon />
@@ -11,7 +11,7 @@
 import { ref, onMounted, computed} from 'vue';
 import type { BlockNoteEditor} from '@blocknote/core';
 import type { DeepReadonly } from 'vue';
-import DragIcon from './icons/dragIcon.vue';
+import DragIcon from './icons/DragIcon.vue';
 import PlusIcon from './icons/PlusIcon.vue';
 
 
@@ -34,8 +34,9 @@ onMounted(() => {
         if (sideMenuState.show) {
         showElement.value = true;
         top.value = sideMenuState.referencePos.top;
-        left.value = sideMenuState.referencePos.x -  sidemenu.value!.offsetWidth;
-        
+        left.value = sideMenuState.referencePos.left -  sidemenu.value!.offsetWidth;
+        console.log(sideMenuState.referencePos)
+        console.log(sidemenu.value!.offsetWidth)
         } else {
         showElement.value = false;
         }
@@ -69,6 +70,12 @@ const blockDragEnd = (event: DragEvent) => {
     z-index: 100;
     top: v-bind(topPx);
     left: v-bind(leftPx);
+}
+
+
+.fake-hide {
+    height: 0px;
+    overflow: hidden;
 }
 
 

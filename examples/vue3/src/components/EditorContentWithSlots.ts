@@ -23,38 +23,32 @@
  * </EditorContentWithSlots>
  * 
  **/
+  
 
-import {defineComponent, h} from 'vue';
-import type { PropType } from 'vue'
-import { EditorContent, Editor } from '@tiptap/vue-3'
+import {
+  defineComponent,
+} from 'vue'
 
-export const EditorContentWithSlots = defineComponent({
+import { EditorContent } from '@tiptap/vue-3'
+
+
+export const EditorContentWithSlots = defineComponent<typeof EditorContent>({
   name: 'EditorContentWithSlots',
-  
-  props: {
-    editor: {
-      default: null,
-      type: Object as PropType<Editor>,
-    },
-  },
-  
-  setup(props : {editor: Editor}, { slots }) {
-    const instance = EditorContent.setup!(props, {} as any) as Record<string, any>; // Calls setup function of parent component
-    const rootEl = instance.rootEl; // Reuse rootEl ref from parent
-    
-    
-    return () => h(
-      'div',
-      {
-        ref: (el) => {
-          rootEl.value = el;
-        },
-      },
-      [
-        EditorContent.render?.call(instance), // This is the VNode from the parent
-        slots?.default ? slots.default() : null // Inject the default slot, if any
-      ]
-      )
+  props: EditorContent.props,
+  setup(props, { slots }){
+    return {
+      //@ts-ignore
+      ...EditorContent.setup.bind(this)(props),
+      slots,
     }
-  })
-  
+  },
+  render() {
+    const contentNode = EditorContent.render!.bind(this)()
+    contentNode.children = [
+      // @ts-ignore
+      ...this.slots?.default?.() || [],
+      ...contentNode.children || []]
+
+    return contentNode
+  },
+})

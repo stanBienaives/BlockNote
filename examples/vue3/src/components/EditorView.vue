@@ -24,23 +24,37 @@ import FormattingToolbar from './FormattingToolbar.vue';
 import SlashMenu from './SlashMenu.vue';
 import "@blocknote/core/style.css";
 import { EditorContentWithSlots as EditorContent } from './EditorContentWithSlots';
+// import { EditorContent } from './EditorContentWithSlots';
+// import { EditorContent } from '@tiptap/vue-3';
 import { useBlockNote } from '../hooks/useBlockNote'
+import { h } from 'vue'
+import { imageBlock, insertImage, customSchema } from './ImageBlock'
 
 const root = ref(null);
 const blocks = ref<Block[]>();
 const editor = ref<BlockNoteEditor | null>(null);
+// const editor = ref<BlockNoteEditor<typeof customSchema>| null>(null);
 const html = ref<string>("");
-onMounted(() => {
+onMounted(async () => {
     editor.value = useBlockNote({
       onEditorContentChange: async (editor) => {
-        html.value = await editor.blocksToHTML(editor.topLevelBlocks);
+        // html.value = await editor.blocksToHTML(editor.topLevelBlocks);
+        // console.log('hoi')
       },
+      blockSchema: customSchema,
+      slashMenuItems: [
+        insertImage,
+      ],
+      // content: "<p>coucou</p>",
       domAttributes: {
         editor: {
           class: "editor",
         },
       },
     })!;
+
+
+    editor.value?.insertBlocks(await editor.value.HTMLToBlocks("<h1>titre1</h1> <p>coucou</p> <p>c'est moi</p><image-component>okokok</image-component>"), editor.value.topLevelBlocks[0]);
 });
 </script>
 

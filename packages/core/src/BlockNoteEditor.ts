@@ -1,7 +1,10 @@
-import { Editor, EditorOptions, Extension } from "@tiptap/core";
+import { EditorOptions, Extension } from "@tiptap/core";
+import { Editor} from '@tiptap/core'
+// import { Editor} from '@tiptap/vue-3'
 import { Node } from "prosemirror-model";
 // import "./blocknote.css";
 import { Editor as TiptapEditor } from "@tiptap/core/dist/packages/core/src/Editor";
+// import { Editor as TiptapEditor } from "@tiptap/vue-3";
 import * as Y from "yjs";
 import { getBlockNoteExtensions } from "./BlockNoteExtensions";
 import {

@@ -98,6 +98,17 @@ export const getBlockNoteExtensions = <BSchema extends BlockSchema>(opts: {
     BlockGroup.configure({
       domAttributes: opts.domAttributes,
     }),
+    // ...Object.keys(opts.blockSchema).map((key) => {
+    //   if (key == 'image-component')
+    //     return opts.blockSchema[key].node
+
+    //   console.log(key)
+      
+    //   return opts.blockSchema[key].node.configure({
+    //     editor: opts.editor,
+    //     domAttributes: opts.domAttributes,
+    //   })
+    // }),
     ...Object.values(opts.blockSchema).map((blockSpec) =>
       blockSpec.node.configure({
         editor: opts.editor,

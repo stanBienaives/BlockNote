@@ -3,6 +3,7 @@ import { Editor } from '@tiptap/vue-3'
 import type {  BlockNoteEditorOptions, BlockSchema, DefaultBlockSchema } from '@blocknote/core'
 import { BlockNoteEditor, defaultBlockSchema} from '@blocknote/core'
 // import { getDefaultReactSlashMenuItems } from '../SlashMenu/defaultReactSlashMenuItems'
+import { ImageBlock } from '../components/ImageBlock'
 
 
 
@@ -11,9 +12,16 @@ class BlockNoteEditorVue<T extends BlockSchema = DefaultBlockSchema> extends Blo
     constructor(options: Partial<BlockNoteEditorOptions<T>>) {
         super(options)
         const newOptions = this._tiptapEditor.options
+        console.log('okok')
         this._tiptapEditor.destroy()
         // @ts-ignore
-        this._tiptapEditor = new Editor(newOptions) as Editor
+        this._tiptapEditor = new Editor({
+            ...newOptions,
+            extensions: [
+                ...newOptions.extensions,
+                // ImageBlock.node
+            ]
+        }) as Editor
     }
 }
 

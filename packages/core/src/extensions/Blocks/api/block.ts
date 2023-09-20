@@ -125,6 +125,7 @@ export function createBlockSpec<
 >(
   blockConfig: BlockConfig<BType, PSchema, ContainsInlineContent, BSchema>
 ): BlockSpec<BType, PSchema> {
+  console.log('createBlockSpec')
   const node = createTipTapBlock<
     BType,
     {
@@ -137,14 +138,17 @@ export function createBlockSpec<
     selectable: blockConfig.containsInlineContent,
 
     addAttributes() {
+      console.log('addAttributes')
       return propsToAttributes(blockConfig);
     },
 
     parseHTML() {
+      console.log('parsetHtml')
       return parse(blockConfig);
     },
 
     renderHTML({ HTMLAttributes }) {
+      console.log('renderHtml')
       return render(blockConfig, HTMLAttributes);
     },
 

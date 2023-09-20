@@ -20,7 +20,7 @@ type TSlashMenuProps = {
 }
 
 
-type ItemNames = 'Heading' | 'Heading 2' | 'Heading 3' | 'Bullet List' | 'Numbered List' | 'Paragraph';
+type ItemNames = 'Heading' | 'Heading 2' | 'Heading 3' | 'Bullet List' | 'Numbered List' | 'Paragraph' | 'Insert Image';
 
 
 type TFilteredItem = BaseSlashMenuItem<DefaultBlockSchema>
@@ -62,6 +62,11 @@ const allItems : Record<ItemNames, Item> = {
         name: 'Paragraphe',
         description: 'Utiliser pour les paragraphes',
         icon: 'paragraph',
+    },
+    'Insert Image': {
+        name: 'Insérer une image',
+        description: 'Insérer une image',
+        icon: 'h1',
     },
 };
 

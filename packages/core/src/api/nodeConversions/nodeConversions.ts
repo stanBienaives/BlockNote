@@ -148,6 +148,8 @@ export function blockToNode<BSchema extends BlockSchema>(
 
   let contentNode: Node;
 
+  if (type == 'image')
+    console.log('block to node', schema.nodes, type)
   if (!block.content) {
     contentNode = schema.nodes[type].create(block.props);
   } else if (typeof block.content === "string") {

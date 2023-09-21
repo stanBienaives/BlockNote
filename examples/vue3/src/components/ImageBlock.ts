@@ -9,15 +9,15 @@ import { insertBlocks } from "../../../../packages/core/src/api/blockManipulatio
 
 
 export const ImageBlock = createVueBlockSpec({
-  type: 'image-component',
+  type: 'imageComponent',
   propSchema: {
     ...defaultProps, 
-    // src: {
-    //   default: "https://via.placeholder.com/1000",
-    // },
-    // alt: {
-    //   default: "image",
-    // },
+    src: {
+      default: "https://picsum.photos/200/300",
+    },
+    alt: {
+      default: "image",
+    },
   },
   containsInlineContent: false,
   component: ImageComponent,
@@ -41,7 +41,7 @@ console.group(ImageBlock)
 
 export const customSchema = {
   ...defaultBlockSchema,
-  "image-component": ImageBlock
+  "imageComponent": ImageBlock
 }
 
 
@@ -57,9 +57,9 @@ export const insertImage = {
     editor.insertBlocks(
       [
         {
-          type: "image-component",
+          type: "imageComponent",
           props: {
-            src: src || "https://via.placeholder.com/1000",
+            src: src || "https://picsum.photos/200/300",
             alt: alt || "image",
           },
         },

@@ -25,6 +25,7 @@ export async function blocksToHTML<BSchema extends BlockSchema>(
     const htmlNode = serializer.serializeNode(node);
     htmlParentElement.appendChild(htmlNode);
   }
+  console.log('inner', htmlParentElement.innerHTML);
 
   const htmlString = await unified()
     .use(rehypeParse, { fragment: true })

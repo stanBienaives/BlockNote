@@ -30,6 +30,7 @@ export function propsToAttributes<
 ) {
   const tiptapAttributes: Record<string, Attribute> = {};
 
+
   Object.entries(blockConfig.propSchema).forEach(([name, spec]) => {
     tiptapAttributes[name] = {
       default: spec.default,

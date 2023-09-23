@@ -30,11 +30,14 @@ const topPx = computed(() => `${top.value}px`);
 const leftPx = computed(() => `${left.value}px`);
 
 onMounted(() => {
+    console.log('mounted')
+    console.log(editor.sideMenu)
     editor.sideMenu.onUpdate((sideMenuState) => {
+        console.log('update')
         if (sideMenuState.show) {
-        showElement.value = true;
-        top.value = sideMenuState.referencePos.top + sideMenuState.referencePos.height / 2 - 30 / 2; // sidemenu.value!.offsetHeight = 30;
-        left.value = sideMenuState.referencePos.left -  sidemenu.value!.offsetWidth;
+            showElement.value = true;
+            top.value = sideMenuState.referencePos.top + sideMenuState.referencePos.height / 2 - 30 / 2; // sidemenu.value!.offsetHeight = 30;
+            left.value = sideMenuState.referencePos.left -  sidemenu.value!.offsetWidth;
         // TODO: use referencePos.height to position the menu in the middle of the block
         } else {
         showElement.value = false;

@@ -159,6 +159,7 @@ export class BlockNoteEditor<BSchema extends BlockSchema = DefaultBlockSchema> {
     private readonly options: Partial<BlockNoteEditorOptions<BSchema>> = {}
   ) {
     // apply defaults
+    console.log('building editor with options', options)
     const newOptions: Omit<typeof options, "defaultStyles" | "blockSchema"> & {
       defaultStyles: boolean;
       blockSchema: BSchema;

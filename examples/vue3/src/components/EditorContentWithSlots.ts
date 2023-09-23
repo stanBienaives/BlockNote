@@ -26,29 +26,48 @@
   
 
 import {
+  Teleport,
   defineComponent,
+  getCurrentInstance,
+  h
 } from 'vue'
 
-import { EditorContent } from '@tiptap/vue-3'
+// import { EditorContent } from '@tiptap/vue-3'
+import { EditorContent } from './EditorContent'
 
 
 export const EditorContentWithSlots = defineComponent<typeof EditorContent>({
   name: 'EditorContentWithSlots',
   props: EditorContent.props,
-  setup(props, { slots }){
-    return {
-      //@ts-ignore
-      ...EditorContent.setup.bind(this)(props),
-      slots,
-    }
-  },
   render() {
-    const contentNode = EditorContent.render!.bind(this)()
-    contentNode.children = [
-      // @ts-ignore
-      ...this.slots?.default?.() || [],
-      ...contentNode.children || []]
-
-    return contentNode
-  },
+    const render = h(EditorContent, this.props)
+    console.log(render)
+    return render;
+  }
 })
+
+
+// export const EditorContentWithSlots = defineComponent<typeof EditorContent>({
+//   name: 'EditorContentWithSlots',
+//   props: EditorContent.props,
+//   setup: EditorContent.setup,
+//   // setup(props, { slots }){
+//   //   const instance = getCurrentInstance()
+//   //   return {
+//   //     //@ts-ignore
+//   //     ...EditorContent.setup.bind(instance)(props),
+//   //     slots,
+//   //   }
+//   // },
+//   render() {
+    
+//     const contentNode = EditorContent.render!.bind(this)()
+//     contentNode.children = [
+//       // @ts-ignore
+//       ...contentNode.children || [],
+//       ...this.$slots?.default?.() || [],
+//     ]
+
+//     return contentNode
+//   },
+// })

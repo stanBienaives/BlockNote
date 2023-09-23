@@ -15,13 +15,14 @@ class BlockNoteEditorVue<T extends BlockSchema = DefaultBlockSchema> extends Blo
         console.log('okok')
         this._tiptapEditor.destroy()
         // @ts-ignore
-        this._tiptapEditor = new Editor({
-            ...newOptions,
-            extensions: [
-                ...newOptions.extensions,
-                // ImageBlock.node
-            ]
-        }) as Editor
+        this._tiptapEditor = new Editor(newOptions) as Editor
+        // this._tiptapEditor = new Editor({
+            // ...newOptions,
+            // extensions: [
+            //     ...newOptions.extensions,
+            //     // ImageBlock.node
+            // ]
+        // }) as Editor
     }
 }
 
@@ -49,9 +50,9 @@ export const useBlockNote = <BSchema extends BlockSchema = DefaultBlockSchema>(
   watch(
     () => deps,
     () => {
-      if (editorRef.value) {
-        editorRef.value!._tiptapEditor.destroy()
-      }
+    //   if (editorRef.value) {
+    //     editorRef.value!._tiptapEditor.destroy()
+    //   }
       editorRef.value = initEditor(options)
     },
     { immediate: true }

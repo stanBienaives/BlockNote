@@ -22,11 +22,7 @@ import SideMenu from './SideMenu.vue';
 import FormattingToolbar from './FormattingToolbar.vue';
 import SlashMenu from './SlashMenu.vue';
 import "@blocknote/core/style.css";
-// import { EditorContentWithSlots } from './EditorContentWithSlots.vue';
 import EditorContentWithSlots from './EditorContentWithSlots.vue';
-// import { EditorContent as EditorContentWithSlots } from './EditorContent';
-// import { EditorContent } from './EditorContentWithSlots';
-// import { EditorContent } from '@tiptap/vue-3';
 import { useBlockNote } from '../hooks/useBlockNote'
 import { h } from 'vue'
 import { imageBlock, insertImage, customSchema } from './ImageBlock'
@@ -64,8 +60,8 @@ onMounted(async () => {
     await new Promise(resolve => setTimeout(resolve, 1000));
 
 
-    // const blocks = await editor.value?.HTMLToBlocks("<h1>titre1</h1><p>le <strong>coucou</strong></p><p>c est moi</p>");
-    const blocks = await editor.value?.HTMLToBlocks("<h1>titre1</h1> <p>coucou</p> <p>c'est moi</p><div data-content-type='imageComponent' data-src='https://res.cloudinary.com/hello-tickets/image/upload/ar_1:1,c_fill,f_auto,q_auto,w_800/v1645844269/gd99ktjpmrtkwwlyn8hx.jpg' ></div>")
+    const blocks = await editor.value?.HTMLToBlocks("<h1>titre1</h1><p>le <strong>coucou</strong></p><p>c est moi</p>");
+    // const blocks = await editor.value?.HTMLToBlocks("<h1>titre1</h1> <p>coucou</p> <p>c'est moi</p><div data-content-type='imageComponent' data-src='https://res.cloudinary.com/hello-tickets/image/upload/ar_1:1,c_fill,f_auto,q_auto,w_800/v1645844269/gd99ktjpmrtkwwlyn8hx.jpg' ></div>")
     // console.log(blocks)
 
     // editor.value?.insertBlocks(await editor.value.HTMLToBlocks("<h1>titre1</h1><p>coucou</p></div>"), editor.value.topLevelBlocks[0]);

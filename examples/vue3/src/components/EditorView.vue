@@ -41,7 +41,8 @@ onMounted(async () => {
       onEditorContentChange: async (editor) => {
         // html.value = await editor.blocksToHTML(editor.topLevelBlocks);
         // console.log(await editor._tiptapEditor.getHTML())
-        // console.log(await editor.blocksToHTML(editor.topLevelBlocks))
+        const html = await editor.blocksToHTML(editor.topLevelBlocks)
+        localStorage.setItem('blocknote', html);
         console.log('hoi')
       },
       blockSchema: customSchema,
@@ -57,11 +58,19 @@ onMounted(async () => {
     })!;
 
 
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    // await new Promise(resolve => setTimeout(resolve, 1000));
 
 
-    const blocks = await editor.value?.HTMLToBlocks("<h1>titre1</h1><p>le <strong>coucou</strong></p><p>c est moi</p>");
+    // const blocks = await editor.value?.HTMLToBlocks("<h1>titre1</h1><p>le <strong>coucou</strong></p><p>c est moi</p>");
     // const blocks = await editor.value?.HTMLToBlocks("<h1>titre1</h1> <p>coucou</p> <p>c'est moi</p><div data-content-type='imageComponent' data-src='https://res.cloudinary.com/hello-tickets/image/upload/ar_1:1,c_fill,f_auto,q_auto,w_800/v1645844269/gd99ktjpmrtkwwlyn8hx.jpg' ></div>")
+    // const blocks = await editor.value?.HTMLToBlocks("<div data-content-type='imageComponent' data-src='https://res.cloudinary.com/hello-tickets/image/upload/ar_1:1,c_fill,f_auto,q_auto,w_800/v1645844269/gd99ktjpmrtkwwlyn8hx.jpg'></div><h1> hello </h1>")
+    // get html from localstorage
+    const html = localStorage.getItem('blocknote') || '<p> Empty </p>';
+    const blocks = await editor.value?.HTMLToBlocks(html!);
+
+
+    // const blocks = await editor.value?.HTMLToBlocks("<div data-content-type='imageComponent' data-src='https://res.cloudinary.com/hello-tickets/image/upload/ar_1:1,c_fill,f_auto,q_auto,w_800/v1645844269/gd99ktjpmrtkwwlyn8hx.jpg'></div><h1> hello </h1>")
+
     // console.log(blocks)
 
     // editor.value?.insertBlocks(await editor.value.HTMLToBlocks("<h1>titre1</h1><p>coucou</p></div>"), editor.value.topLevelBlocks[0]);

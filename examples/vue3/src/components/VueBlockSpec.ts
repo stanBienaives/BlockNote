@@ -94,10 +94,11 @@ import { nodeViewProps } from '@tiptap/vue-3'
         domAttributes?: BlockNoteDOMAttributes;
       }
     >({
+
+    // const node = Node.create({
         name: blockConfig.type,
         content: "",
         atom: true,
-        // inlineContent: false,
         addAttributes() {
             return propsToAttributes(blockConfig);
         },
@@ -109,19 +110,14 @@ import { nodeViewProps } from '@tiptap/vue-3'
             //     { tag: 'div'}
             // ]
             return parse(blockConfig)
-            // return [
-            //     {
-            //     tag: blockConfig.type,
-            //     },
-            // ]
         },
         
         renderHTML(all) {
             console.log('renderHtml')
             console.log(all)
             console.log(mergeAttributes(all.HTMLAttributes))
-            return render(blockConfig, mergeAttributes(all.HTMLAttributes));
-            // return [blockConfig.type, mergeAttributes(HTMLAttributes)]
+            // return render(blockConfig, mergeAttributes(all.HTMLAttributes));
+            return [blockConfig.type, mergeAttributes(all.HTMLAttributes), ['div', { "data-content-type": all.node.type.name, ...mergeAttributes(all.HTMLAttributes)}]]
         },
 
         addNodeView() {
@@ -294,4 +290,3 @@ import { nodeViewProps } from '@tiptap/vue-3'
     //   propSchema: blockConfig.propSchema,
     // };
   }
-  

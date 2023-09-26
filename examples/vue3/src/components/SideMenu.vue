@@ -13,11 +13,12 @@ import type { BlockNoteEditor} from '@blocknote/core';
 import type { DeepReadonly } from 'vue';
 import DragIcon from './icons/DragIcon.vue';
 import PlusIcon from './icons/PlusIcon.vue';
+import { CustomBlockSchema } from './blockSchema';
 
 
 type TSideMenuProps = {
     // DeepReadonly is giving me reason to hate typescript and vue
-    editor: DeepReadonly<BlockNoteEditor>
+    editor: DeepReadonly<BlockNoteEditor<CustomBlockSchema>>
 }
 
 const {editor} = defineProps<TSideMenuProps>();
@@ -30,10 +31,7 @@ const topPx = computed(() => `${top.value}px`);
 const leftPx = computed(() => `${left.value}px`);
 
 onMounted(() => {
-    console.log('mounted')
-    console.log(editor.sideMenu)
     editor.sideMenu.onUpdate((sideMenuState) => {
-        console.log('update')
         if (sideMenuState.show) {
             showElement.value = true;
             top.value = sideMenuState.referencePos.top + sideMenuState.referencePos.height / 2 - 30 / 2; // sidemenu.value!.offsetHeight = 30;
@@ -57,7 +55,7 @@ const blockDragEnd = () => {
     editor.sideMenu.blockDragEnd();
 };
 </script>
-  
+
 <style scoped>
 
 .side-menu {

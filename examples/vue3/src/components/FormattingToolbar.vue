@@ -26,12 +26,12 @@ import { ref, onMounted, computed} from 'vue';
 import IconSvg from './icons/IconSvg.vue';
 import type { BlockNoteEditor} from '@blocknote/core';
 import type { DeepReadonly } from 'vue';
-import { format } from 'path';
+import { CustomBlockSchema } from './blockSchema';
 
     
 type YFormattingMenuProps = {
   // DeepReadonly is giving me reason to hate typescript and vue
-  editor: DeepReadonly<BlockNoteEditor>
+  editor: DeepReadonly<BlockNoteEditor<CustomBlockSchema>>
 }
 
 const {editor} = defineProps<YFormattingMenuProps>();
@@ -111,10 +111,6 @@ onMounted(() => {
   font-size: 16px;
 }
 
-.formatting-menu .button svg {
-  /* height: 70%;
-  width: 70%; */
-}
 
 .formatting-menu .button:hover {
   background-color: #e0e0e0;

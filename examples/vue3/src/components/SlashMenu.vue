@@ -10,13 +10,14 @@ import { onMounted, ref, DeepReadonly, computed} from 'vue'
 import type { BlockNoteEditor} from '@blocknote/core';
 import SlashMenuItem from './SlashMenuItem.vue';
 import { IconNames } from './icons/icons';
+import { CustomBlockSchema } from './blockSchema';
 import {
   BaseSlashMenuItem,
   DefaultBlockSchema,
 } from "@blocknote/core";
 type TSlashMenuProps = {
     // DeepReadonly is giving me reason to hate typescript and vue
-    editor: DeepReadonly<BlockNoteEditor>
+    editor: DeepReadonly<BlockNoteEditor<CustomBlockSchema>>
 }
 
 

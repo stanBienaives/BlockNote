@@ -1,11 +1,14 @@
 
 
-import { createBlockSpec, defaultProps, defaultBlockSchema } from "@blocknote/core";
+//@ts-ignore
+import { defaultProps, defaultBlockSchema } from "@blocknote/core";
 import { createVueBlockSpec } from "./VueBlockSpec";
-import { NodeViewWrapper } from "@tiptap/vue-3";
 import { h } from 'vue'
+//@ts-ignore
 import ImageComponent from './ImageComponent.vue'
 import { insertBlocks } from "../../../../packages/core/src/api/blockManipulation/blockManipulation";
+import type { BaseSlashMenuItem} from '@blocknote/core'
+import type { CustomBlockSchema } from "./blockSchema";
 
 
 export const ImageBlock = createVueBlockSpec({
@@ -20,46 +23,22 @@ export const ImageBlock = createVueBlockSpec({
     },
   },
   containsInlineContent: false,
-  component: ImageComponent,
-  // render: ({block}) => {
-  //   console.log('render')
-  //   return h('div' , { id: 'image-wrapper' }, 
-  //   [
-  //     h('img', {
-  //       src: 'https://via.placeholder.com/1000',
-  //       alt: 'okokok'
-  //     })
-  //   ])
-  //   // ['div', { id: 'image-wrapper'}, [ 'img', { src: 'https://via.placeholder.com/1000', alt: 'okokok' }]]
-  // } 
-  // console.log(editor.blocksToMarkdown(editor.topLevelBlocks));
+  render: ({node}) => h(ImageComponent, node.attrs),
 });
 
 
-console.group(ImageBlock)
-
-
-export const customSchema = {
-  ...defaultBlockSchema,
-  "imageComponent": ImageBlock
-}
-
-
-export const insertImage = {
+export const insertImage : BaseSlashMenuItem<CustomBlockSchema> = {
   name: "Insert Image",
-  execute: (editor : any) => {
-    // const src: string | null = prompt("Enter image URL");
-    // const alt: string | null = prompt("Enter image alt text");
+  execute: (editor) => {
     const src = null;
     const alt = null;
-    
-    console.log(insertBlocks)
+    const randomWord = Math.random().toString(36).substring(2, 7);
     editor.insertBlocks(
       [
         {
           type: "imageComponent",
           props: {
-            src: src || "https://picsum.photos/200/300",
+            src: src || `https://picsum.photos/seed/${randomWord}/200/300`,
             alt: alt || "image",
           },
         },
@@ -69,8 +48,5 @@ export const insertImage = {
       );
     },
     aliases: ["image-component", "image", "img", "picture", "media"],
-    group: "Media",
-    icon: 'some',
-    hint: "Insert an image",
   } 
   

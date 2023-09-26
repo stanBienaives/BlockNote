@@ -1,9 +1,10 @@
 <template>
     <!-- <node-view-wrapper class="vue-component"> -->
-    <div>
       <!-- <img :src="src || 'https://picsum.photos/200/300'" /> -->
-      <img :src="src || 'https://picsum.photos/200/300'" />
-    </div>
+      <div>
+        <img :src="src || 'https://picsum.photos/200/300'" />
+      </div>
+      <!-- <slot></slot> -->
       <!-- <img :src="node.attrs.src" /> -->
     <!-- </node-view-wrapper> -->
   </template>

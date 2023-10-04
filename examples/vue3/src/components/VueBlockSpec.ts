@@ -61,7 +61,7 @@ import { nodeViewProps } from '@tiptap/vue-3'
     >({
 
         name: blockConfig.type,
-        content: "",
+        atom: true,
         addAttributes() {
           return propsToAttributes(blockConfig);
         },
@@ -69,8 +69,12 @@ import { nodeViewProps } from '@tiptap/vue-3'
           return parse(blockConfig)
         },
         
-        renderHTML({HTMLAttributes}) {
-          return [blockConfig.type, mergeAttributes(HTMLAttributes), ['div', { "data-content-type": blockConfig.type, ...mergeAttributes(HTMLAttributes)}]]
+        renderHTML({HTMLAttributes, node}) {
+          // return render(blockConfig, HTMLAttributes)
+          if (node.isAtom) {
+            return [blockConfig.type, mergeAttributes(HTMLAttributes), ['div', {"data-content-type": blockConfig.type, ...mergeAttributes(HTMLAttributes)}]]
+          }
+          return [blockConfig.type, mergeAttributes(HTMLAttributes), 0]
         },
 
         addNodeView() {
@@ -91,8 +95,32 @@ import { nodeViewProps } from '@tiptap/vue-3'
                 }
               }
               return htmlAttributes;
-
             }
+
+
+            // const getBlock = (props: NodeViewProps) => {
+
+            //   const editor = this.options.editor! as BlockNoteEditor<
+            //     BSchema & { [k in BType]: BlockSpec<BType, PSchema> }
+            //   >;
+            //   const pos = typeof props.getPos === "function" ? props.getPos() : undefined;
+
+            //   // Gets TipTap editor instance
+            //   const tipTapEditor = editor._tiptapEditor;
+            //   // Gets parent blockContainer node
+            //   const blockContainer = tipTapEditor.state.doc.resolve(pos!).node();
+            //   // Gets block identifier
+            //   const blockIdentifier = blockContainer.attrs.id;
+            //   console.log(blockIdentifier)
+            //   // Get the block
+            //   const block = editor.getBlock(blockIdentifier)!;
+            //   // if (block.type !== blockConfig.type) {
+            //   //   throw new Error("Block type does not match");
+            //   // }
+            //   return block;
+            // }
+
+            
 
             const wrapper = defineComponent({
                 props: nodeViewProps,
@@ -101,7 +129,7 @@ import { nodeViewProps } from '@tiptap/vue-3'
                 },
                 render() {
                     return  h(NodeViewWrapper, {
-                      as: 'span',
+                      as: 'div',
                       ...buildHtmlAttribute(this.$props),
                       "data-content-type": blockConfig.type,
                       className: mergeCSSClasses(
@@ -109,6 +137,7 @@ import { nodeViewProps } from '@tiptap/vue-3'
                         blockStyles.blockContent,
                         blockContentDOMAttributes.class
                       )
+                    // }, [h(blockConfig.render, {...this.$props, block: getBlock(this.$props)})])
                     }, [h(blockConfig.render, {...this.$props})])
                     
                 }                

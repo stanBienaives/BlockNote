@@ -44,7 +44,7 @@ export const insertImage : BaseSlashMenuItem<CustomBlockSchema> = {
         },
       ],
       editor.getTextCursorPosition().block,
-      "after"
+      undefined
       );
     },
     aliases: ["image-component", "image", "img", "picture", "media"],

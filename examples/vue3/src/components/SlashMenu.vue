@@ -1,6 +1,13 @@
 <template>
     <div class="slash-menu" ref="slashmenu" :class="{ 'fake-hide': !showElement}">
-        <SlashMenuItem v-for="(item, index) in items" :key="index" :icon="item.icon" :name="item.name" :description="item.description" :selected="selected == index"/>
+        <SlashMenuItem 
+            v-for="(item, index) in filteredItems" 
+            :key="index"
+            :icon="itemMetaHash[item.name].icon" 
+            :name="item.name" 
+            :description="itemMetaHash[item.name].description" 
+            :selected="selected == index" 
+        />
     </div>
 </template>
 
@@ -21,19 +28,20 @@ type TSlashMenuProps = {
 }
 
 
-type ItemNames = 'Heading' | 'Heading 2' | 'Heading 3' | 'Bullet List' | 'Numbered List' | 'Paragraph' | 'Insert Image';
+type ItemNames = BaseSlashMenuItem<CustomBlockSchema>['name'];
+// type ItemNames = 'Heading' | 'Heading 2' | 'Heading 3' | 'Bullet List' | 'Numbered List' | 'Paragraph' | 'Insert Image';
 
 
-type TFilteredItem = BaseSlashMenuItem<DefaultBlockSchema>
+type TFilteredItem = BaseSlashMenuItem<CustomBlockSchema>
 
-type Item = {
+type ItemMeta = {
     name: string,
     description: string,
     icon: IconNames,
 }
 
 
-const allItems : Record<ItemNames, Item> = {
+const itemMetaHash : Record<ItemNames, ItemMeta> = {
     'Heading': {
         name: 'Titre 1',
         description: 'Utiliser pour les titres principaux',
@@ -87,9 +95,11 @@ const filteredItems = ref<TFilteredItem[]>([]);
 const selected = ref(0);
 
 
-const items = computed<Item[]>(() => {
-    return filteredItems.value.map(({name}) => allItems[name as ItemNames])
-})
+// const items = computed<Item[]>(() => {
+//     return filteredItems.value.map((item) => {
+//         return {...allItems[item.name as ItemNames], item: item} satisfies Item;
+//     }) satisfies Item[];
+// })
 
 onMounted(() => {
     editor.slashMenu.onUpdate((slashMenuState) => {

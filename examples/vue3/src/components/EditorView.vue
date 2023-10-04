@@ -8,15 +8,14 @@
       </EditorContentWithSlots>
     </div>
     <div >
-      {{  html }}
+      <!-- {{  html }} -->
     </div>
-    <div>
-      {{ blocks }}
-    </div>
+    <textarea :value="cleanBlocks" name="" id="myTextarea" cols="200" rows="200">
+    </textarea>
 </template>
   
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, defineProps, watch, computed } from 'vue';
 import { Block, BlockNoteEditor} from "@blocknote/core";
 import SideMenu from './SideMenu.vue';
 import FormattingToolbar from './FormattingToolbar.vue';
@@ -24,25 +23,38 @@ import SlashMenu from './SlashMenu.vue';
 import "@blocknote/core/style.css";
 import EditorContentWithSlots from './EditorContentWithSlots.vue';
 import { useBlockNote } from '../composables/useBlockNote'
-import { h } from 'vue'
 import { insertImage} from './ImageBlock'
 import {customSchema, CustomBlockSchema } from './blockSchema'
 import { getDefaultSlashMenuItems } from "@blocknote/core";
 
+const {editable, onContentChange, initialContent} = defineProps<{
+  editable: boolean,
+  onContentChange: (string: string) => void,
+  initialContent: string,
+}>()
+
 const root = ref(null);
-const blocks = ref<Block[]>();
+const blocks = ref<Block<CustomBlockSchema>[]>();
 const editor = ref<BlockNoteEditor<CustomBlockSchema> | null>(null);
 const html = ref<string>("");
 
+const cleanBlocks = computed(() => {
+  return JSON.stringify(blocks.value, null, 2);
+})
+
+// watch(initialContent, async (value) => {
+// })
 
 onMounted(async () => {
     editor.value = useBlockNote({
       onEditorContentChange: async (editor) => {
+        onContentChange(await editor.blocksToHTML(editor.topLevelBlocks))
         const htmlStored = await editor.blocksToHTML(editor.topLevelBlocks)
         localStorage.setItem('blocknote', htmlStored);
         html.value = htmlStored;
+        blocks.value = editor.topLevelBlocks;
       },
-      // editable: true,
+      editable,
       blockSchema: customSchema,
       slashMenuItems: [
         ...getDefaultSlashMenuItems(customSchema),
@@ -54,11 +66,10 @@ onMounted(async () => {
         },
       },
     })!;
+    const blocksFromHtml = await editor.value?.HTMLToBlocks(initialContent);
+    editor.value?.insertBlocks(blocksFromHtml, editor.value.topLevelBlocks[0]);
 
-    const htmlStored = localStorage.getItem('blocknote') || '<p> Empty </p>';
-    const blocksFromHtml = await editor.value?.HTMLToBlocks(htmlStored!);
-
-    editor.value?.insertBlocks(blocksFromHtml!, editor.value.topLevelBlocks[0]);
+    // const htmlStored = localStorage.getItem('blocknote') || '<p> Empty </p>';
 });
 </script>
 

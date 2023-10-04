@@ -511,8 +511,8 @@ export class SideMenuView<BSchema extends BlockSchema> implements PluginView {
 
     const { contentNode, endPos } = blockInfo;
 
-    // Creates a new block if current one is not empty for the suggestion menu to open in.
-    if (contentNode.textContent.length !== 0) {
+    // Creates a new block if current one is not empty or is atom for the suggestion menu to open in.
+    if (contentNode.textContent.length !== 0 || contentNode.isAtom) {
       const newBlockInsertionPos = endPos + 1;
       const newBlockContentPos = newBlockInsertionPos + 2;
 

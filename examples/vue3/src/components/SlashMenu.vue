@@ -7,6 +7,7 @@
             :name="item.name" 
             :description="itemMetaHash[item.name].description" 
             :selected="selected == index" 
+            :onClick="() => editor.slashMenu.itemCallback(item)"
         />
     </div>
 </template>
@@ -20,7 +21,6 @@ import { IconNames } from './icons/icons';
 import { CustomBlockSchema } from './blockSchema';
 import {
   BaseSlashMenuItem,
-  DefaultBlockSchema,
 } from "@blocknote/core";
 type TSlashMenuProps = {
     // DeepReadonly is giving me reason to hate typescript and vue
@@ -39,6 +39,7 @@ type ItemMeta = {
     description: string,
     icon: IconNames,
 }
+
 
 
 const itemMetaHash : Record<ItemNames, ItemMeta> = {

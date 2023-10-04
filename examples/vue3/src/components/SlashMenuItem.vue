@@ -1,5 +1,5 @@
 <template>
-  <div class="slash-menu-item" :class="{selected: selected}">
+  <div class="slash-menu-item" :class="{selected: selected}" @click="onClick" @mousedown.prevent>
     <div class="icon">
       <IconSvg :identifier="icon" />
     </div>

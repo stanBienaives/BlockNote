@@ -61,7 +61,8 @@ import { nodeViewProps } from '@tiptap/vue-3'
     >({
 
         name: blockConfig.type,
-        atom: true,
+        atom: blockConfig.containsInlineContent ? false : true,
+        content: blockConfig.containsInlineContent ? "inline*" : "",
         addAttributes() {
           return propsToAttributes(blockConfig);
         },

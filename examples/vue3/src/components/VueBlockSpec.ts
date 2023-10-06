@@ -12,11 +12,13 @@ import {
     BlockNoteDOMAttributes,
     BlockSchema,
     BlockSpec,
+    render,
   } from '@blocknote/core'
 
   import {
     NodeViewWrapper,
     VueNodeViewRenderer,
+    NodeViewContent,
   } from "@tiptap/vue-3";
   import type { NodeViewProps } from '@tiptap/vue-3' 
   import { defineComponent, h } from 'vue'
@@ -25,6 +27,28 @@ import {
 export function camelToDataKebab(str: string): string {
   return "data-" + str.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase();
 }
+
+
+export const InlineContent = (
+  props: any
+) => {
+  // const inlineContentDOMAttributes =
+  //   useContext(BlockNoteDOMAttributesContext).inlineContent || {};
+
+  const classNames = mergeCSSClasses(
+    props.className || "",
+    blockStyles.inlineContent,
+    // inlineContentDOMAttributes.class
+  );
+
+  console.log(classNames)
+
+  return h(NodeViewContent, 
+    {
+      class: classNames
+    }
+  );
+};
 
 
   // extend BlockConfig but use a React render function
@@ -75,7 +99,7 @@ import { nodeViewProps } from '@tiptap/vue-3'
           if (node.isAtom) {
             return [blockConfig.type, mergeAttributes(HTMLAttributes), ['div', {"data-content-type": blockConfig.type, ...mergeAttributes(HTMLAttributes)}]]
           }
-          return [blockConfig.type, mergeAttributes(HTMLAttributes), 0]
+          return [blockConfig.type, mergeAttributes(HTMLAttributes), ['div', {"data-content-type": blockConfig.type, ...mergeAttributes(HTMLAttributes)}, 0]]
         },
 
         addNodeView() {
@@ -121,6 +145,7 @@ import { nodeViewProps } from '@tiptap/vue-3'
             //   return block;
             // }
 
+            console.log('blockContentDOMAttributes', blockContentDOMAttributes)
             
 
             const wrapper = defineComponent({

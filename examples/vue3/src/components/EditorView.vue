@@ -10,6 +10,9 @@
     <div >
       <!-- {{  html }} -->
     </div>
+    <div >
+      {{  html }}
+    </div>
     <textarea :value="cleanBlocks" name="" id="myTextarea" cols="200" rows="200">
     </textarea>
 </template>
@@ -26,6 +29,7 @@ import { useBlockNote } from '../composables/useBlockNote'
 import { insertImage} from './ImageBlock'
 import {customSchema, CustomBlockSchema } from './blockSchema'
 import { getDefaultSlashMenuItems } from "@blocknote/core";
+import { insertImageWithCaption } from './ImageWithCaption';
 
 const {editable, onContentChange, initialContent} = defineProps<{
   editable: boolean,
@@ -48,17 +52,18 @@ const cleanBlocks = computed(() => {
 onMounted(async () => {
     editor.value = useBlockNote({
       onEditorContentChange: async (editor) => {
+        blocks.value = editor.topLevelBlocks;
         onContentChange(await editor.blocksToHTML(editor.topLevelBlocks))
         const htmlStored = await editor.blocksToHTML(editor.topLevelBlocks)
         localStorage.setItem('blocknote', htmlStored);
         html.value = htmlStored;
-        blocks.value = editor.topLevelBlocks;
       },
       editable,
       blockSchema: customSchema,
       slashMenuItems: [
         ...getDefaultSlashMenuItems(customSchema),
         insertImage,
+        insertImageWithCaption
       ],
       domAttributes: {
         editor: {

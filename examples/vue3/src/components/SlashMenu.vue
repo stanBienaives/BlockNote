@@ -78,6 +78,11 @@ const itemMetaHash : Record<ItemNames, ItemMeta> = {
         description: 'Insérer une image',
         icon: 'h1',
     },
+    'Insert Image With caption': {
+        name: 'Insérer une image',
+        description: 'Insérer une image',
+        icon: 'h1',
+    },
 };
 
 

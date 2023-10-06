@@ -6,14 +6,32 @@ import { BlockNoteEditor, defaultBlockSchema} from '@blocknote/core'
 import { ImageBlock } from '../components/ImageBlock'
 
 
+import { Plugin } from 'prosemirror-state';
+
+const confirmDeletePlugin = new Plugin({
+  filterTransaction: (transaction, state) => {
+    if (isDeletionOfProtectedNode(transaction)) {
+      return window.confirm('Are you sure you want to delete this?');
+    }
+    return true;  // Allow all other transactions to proceed
+  },
+});
+
+
+function isDeletionOfProtectedNode(transaction) {
+ console.log('check for deletion')
+ return 
+}
+
 
 class BlockNoteEditorVue<T extends BlockSchema = DefaultBlockSchema> extends BlockNoteEditor<T> {
     // _tiptapEditor: Editor
     constructor(options: Partial<BlockNoteEditorOptions<T>>) {
         super(options)
         const newOptions = this._tiptapEditor.options
-        console.log('okok')
         this._tiptapEditor.destroy()
+
+
         // @ts-ignore
         this._tiptapEditor = new Editor(newOptions) as Editor
         // this._tiptapEditor = new Editor({

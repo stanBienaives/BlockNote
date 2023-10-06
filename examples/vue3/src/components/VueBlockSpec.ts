@@ -37,6 +37,7 @@ export const InlineContent = (
 
   const classNames = mergeCSSClasses(
     props.className || "",
+    //@ts-ignore
     blockStyles.inlineContent,
     // inlineContentDOMAttributes.class
   );
@@ -55,7 +56,7 @@ export const InlineContent = (
   export type VueBlockConfig<
     Type extends string,
     PSchema extends PropSchema,
-    ContainsInlineContent extends false,
+    ContainsInlineContent extends boolean,
     BSchema extends BlockSchema
   > = Omit<
     BlockConfig<Type, PSchema, ContainsInlineContent, BSchema>,
@@ -71,7 +72,7 @@ import { nodeViewProps } from '@tiptap/vue-3'
   export function createVueBlockSpec<
     BType extends string,
     PSchema extends PropSchema,
-    ContainsInlineContent extends false,
+    ContainsInlineContent extends boolean,
     BSchema extends BlockSchema
   >(
     blockConfig: VueBlockConfig<BType, PSchema, ContainsInlineContent, BSchema>
@@ -122,31 +123,6 @@ import { nodeViewProps } from '@tiptap/vue-3'
               return htmlAttributes;
             }
 
-
-            // const getBlock = (props: NodeViewProps) => {
-
-            //   const editor = this.options.editor! as BlockNoteEditor<
-            //     BSchema & { [k in BType]: BlockSpec<BType, PSchema> }
-            //   >;
-            //   const pos = typeof props.getPos === "function" ? props.getPos() : undefined;
-
-            //   // Gets TipTap editor instance
-            //   const tipTapEditor = editor._tiptapEditor;
-            //   // Gets parent blockContainer node
-            //   const blockContainer = tipTapEditor.state.doc.resolve(pos!).node();
-            //   // Gets block identifier
-            //   const blockIdentifier = blockContainer.attrs.id;
-            //   console.log(blockIdentifier)
-            //   // Get the block
-            //   const block = editor.getBlock(blockIdentifier)!;
-            //   // if (block.type !== blockConfig.type) {
-            //   //   throw new Error("Block type does not match");
-            //   // }
-            //   return block;
-            // }
-
-            console.log('blockContentDOMAttributes', blockContentDOMAttributes)
-            
 
             const wrapper = defineComponent({
                 props: nodeViewProps,

@@ -6,10 +6,8 @@ import { createVueBlockSpec } from "./VueBlockSpec";
 import { h } from 'vue'
 //@ts-ignore
 import ImageWithCaptionComponent from './ImageWithCaptionComponent.vue'
-import { insertBlocks } from "../../../../packages/core/src/api/blockManipulation/blockManipulation";
 import type { BaseSlashMenuItem} from '@blocknote/core'
 import type { CustomBlockSchema } from "./blockSchema";
-import { NodeViewContent } from "@tiptap/vue-3";
 
 
 

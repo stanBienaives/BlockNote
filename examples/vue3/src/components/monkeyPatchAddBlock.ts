@@ -42,7 +42,7 @@ export function addBlockMonkeyPatch() {
     
     // HERE IS THE MONKEY PATCH we added contentNode.isAtom to the if statement the rest of the fucntion is identical to the sidemenu.addBlock
     // Creates a new block if current one is not empty or is atom for the suggestion menu to open in.
-    if (contentNode.textContent.length !== 0 || contentNode.isAtom) {
+    if (contentNode.textContent.length !== 0 || contentNode.isAtom) {
       const newBlockInsertionPos = endPos + 1;
       const newBlockContentPos = newBlockInsertionPos + 2;
       

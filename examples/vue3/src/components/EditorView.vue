@@ -18,7 +18,7 @@
 </template>
   
 <script setup lang="ts">
-import { ref, onMounted, defineProps, watch, computed } from 'vue';
+import { ref, onMounted, defineProps, watch, computed, shallowRef } from 'vue';
 import { Block, BlockNoteEditor} from "@blocknote/core";
 import SideMenu from './SideMenu.vue';
 import FormattingToolbar from './FormattingToolbar.vue';
@@ -39,7 +39,8 @@ const {editable, onContentChange, initialContent} = defineProps<{
 
 const root = ref(null);
 const blocks = ref<Block<CustomBlockSchema>[]>();
-const editor = ref<BlockNoteEditor<CustomBlockSchema> | null>(null);
+// Shallow ref is used to avoid typescript errors (ts(7056)) on using DeepReadonly
+const editor = shallowRef<BlockNoteEditor<CustomBlockSchema> | null>(null);
 const html = ref<string>("");
 
 const cleanBlocks = computed(() => {

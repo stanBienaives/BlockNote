@@ -13,26 +13,27 @@
 </template>
 
 
-<script setup lang="ts">
+<script setup lang="ts" generic="BSchema extends BlockSchema = DefaultBlockSchema">
 import { onMounted, ref, DeepReadonly, computed} from 'vue'
 import type { BlockNoteEditor} from '@blocknote/core';
 import SlashMenuItem from './SlashMenuItem.vue';
 import { IconNames } from './icons/icons';
-import { CustomBlockSchema } from './blockSchema';
+import { BlockSchema, DefaultBlockSchema } from '@blocknote/core';
 import {
   BaseSlashMenuItem,
 } from "@blocknote/core";
 type TSlashMenuProps = {
     // DeepReadonly is giving me reason to hate typescript and vue
-    editor: DeepReadonly<BlockNoteEditor<CustomBlockSchema>>
+    // editor: DeepReadonly<BlockNoteEditor<T>> // fixed with shallowRef on editor
+    editor: BlockNoteEditor<BSchema>
 }
 
 
-type ItemNames = BaseSlashMenuItem<CustomBlockSchema>['name'];
+type ItemNames = BaseSlashMenuItem<BSchema>['name'];
 // type ItemNames = 'Heading' | 'Heading 2' | 'Heading 3' | 'Bullet List' | 'Numbered List' | 'Paragraph' | 'Insert Image';
 
 
-type TFilteredItem = BaseSlashMenuItem<CustomBlockSchema>
+type TFilteredItem = BaseSlashMenuItem<BSchema>
 
 type ItemMeta = {
     name: string,

@@ -6,27 +6,25 @@
     </div>
     <div v-if="showSideMenuSelector" class="side-menu-selector" @mousemove.prevent.stop>
       <div  @click="deleteBlock"> Delete</div>
-      <div  @click="updateBlock({type: 'heading', props: { level: '1' }})()"> > Titre 1 </div>
-      <div  @click="updateBlock({type: 'heading', props: { level: '2' }})()"> > Titre 2 </div>
-      <div  @click="updateBlock({type: 'heading', props: { level: '3' }})()"> > Titre 3 </div>
+      <div  @click="updateHeading('1')()"> > Titre 1 </div>
+      <div  @click="updateHeading('2')()"> > Titre 2 </div>
+      <div  @click="updateHeading('3')()"> > Titre 3 </div>
       <div  @click="updateBlock({type: 'paragraph'})()"> Paragraphe </div>
     </div>
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, onMounted, computed, watch, toRaw} from 'vue';
-import type { BlockNoteEditor, Block} from '@blocknote/core';
-import type { DeepReadonly } from 'vue';
+<script setup lang="ts" generic="BSchema extends BlockSchema = DefaultBlockSchema">
+import { ref, onMounted, computed, watch, toRaw, shallowRef} from 'vue';
+import type { BlockNoteEditor, Block, DefaultBlockSchema, PartialBlock, BlockSchema} from '@blocknote/core';
 import DragIcon from './icons/DragIcon.vue';
 import PlusIcon from './icons/PlusIcon.vue';
-import { CustomBlockSchema } from './blockSchema';
 import { addBlockMonkeyPatch } from './monkeyPatchAddBlock';
 
 
 type TSideMenuProps = {
   // DeepReadonly is giving me reason to hate typescript and vue
-  editor: DeepReadonly<BlockNoteEditor<CustomBlockSchema>>
+  editor: BlockNoteEditor<BSchema>
 }
   
 const {editor} = defineProps<TSideMenuProps>();
@@ -38,22 +36,30 @@ const left = ref(0);
 const topPx = computed(() => `${top.value}px`);
 const leftPx = computed(() => `${left.value}px`);
 const showSideMenuSelector = ref(false)
-const block = ref<Block<CustomBlockSchema> | null>(null);
+const block = shallowRef<Block<BSchema> | null>(null);
     
     
     
     
 const deleteBlock = () => {
   if (block.value)
-  editor.removeBlocks([block.value.id])
+    editor.removeBlocks([block.value.id])
   showSideMenuSelector.value = false;
-  
 }
-    
-const updateBlock = (update: Partial<Block<CustomBlockSchema>>) => () => {
+
+const updateBlock = (update: PartialBlock<BSchema>) => () => {
+
+  console.log(update)
   editor.updateBlock(block.value!.id, update)
   showSideMenuSelector.value = false;
 }
+
+const updateHeading = (level: '1' |'2' | '3') => () => {
+  console.log('update heading')
+  //@ts-ignore
+  updateBlock({type: 'heading', props: { level }})()
+}
+    
     
     
 onMounted(() => {
@@ -62,7 +68,7 @@ onMounted(() => {
     if (sideMenuState.show) {
       showElement.value = true;
       top.value = sideMenuState.referencePos.top + sideMenuState.referencePos.height / 2 - 30 / 2; // sidemenu.value!.offsetHeight = 30;
-      left.value = sideMenuState.referencePos.left -  sidemenu.value!.offsetWidth;
+      left.value = sideMenuState.referencePos.left -  (sidemenu.value?.offsetWidth || 0);
       // TODO: use referencePos.height to position the menu in the middle of the block
     } else {
       showElement.value = false;
@@ -72,7 +78,7 @@ onMounted(() => {
 
 
 watch(block,
-() => showSideMenuSelector.value = false
+  () => showSideMenuSelector.value = false
 )
 
 watch(showSideMenuSelector, 
@@ -80,7 +86,9 @@ watch(showSideMenuSelector,
   if (value)
   editor.sideMenu.freezeMenu()
   else
-  editor.sideMenu.unfreezeMenu()
+    setTimeout(() => {
+      editor.sideMenu.unfreezeMenu()
+    }, 2000);
 }
 )
 

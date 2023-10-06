@@ -21,17 +21,16 @@
   
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts" generic="BSchema extends BlockSchema = DefaultBlockSchema">
 import { ref, onMounted, computed} from 'vue';
 import IconSvg from './icons/IconSvg.vue';
-import type { BlockNoteEditor} from '@blocknote/core';
+import type { BlockNoteEditor, BlockSchema, DefaultBlockSchema} from '@blocknote/core';
 import type { DeepReadonly } from 'vue';
-import { CustomBlockSchema } from './blockSchema';
 
     
 type YFormattingMenuProps = {
   // DeepReadonly is giving me reason to hate typescript and vue
-  editor: DeepReadonly<BlockNoteEditor<CustomBlockSchema>>
+  editor: BlockNoteEditor<BSchema>
 }
 
 const {editor} = defineProps<YFormattingMenuProps>();

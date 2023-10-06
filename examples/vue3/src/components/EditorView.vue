@@ -46,6 +46,42 @@ const cleanBlocks = computed(() => {
   return JSON.stringify(blocks.value, null, 2);
 })
 
+
+function removeClassAttributesUsingDOM(html: string) : string {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+    
+    const allElementsWithClass = doc.querySelectorAll('[class]');
+    allElementsWithClass.forEach(el => el.removeAttribute('class'));
+
+    return doc.body.innerHTML;
+}
+
+function removeTrailingEmptyParagraphs(html: string): string {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+    
+    const children = Array.from(doc.body.children);
+    let removed = false;
+
+    for (let i = children.length - 1; i >= 0; i--) {
+        const child = children[i] as HTMLElement; // Type cast to HTMLElement
+        if (child.tagName === 'P' && !child.textContent?.trim()) {
+            child.remove();
+            removed = true;
+        } else if (removed) {
+            break;
+        }
+    }
+
+    return doc.body.innerHTML;
+}
+
+
+function cleanHtml(html: string) : string{
+    return removeTrailingEmptyParagraphs(removeClassAttributesUsingDOM(html));
+}
+
 // watch(initialContent, async (value) => {
 // })
 
@@ -54,7 +90,7 @@ onMounted(async () => {
       onEditorContentChange: async (editor) => {
         blocks.value = editor.topLevelBlocks;
         onContentChange(await editor.blocksToHTML(editor.topLevelBlocks))
-        const htmlStored = await editor.blocksToHTML(editor.topLevelBlocks)
+        const htmlStored = cleanHtml(await editor.blocksToHTML(editor.topLevelBlocks))
         localStorage.setItem('blocknote', htmlStored);
         html.value = htmlStored;
       },

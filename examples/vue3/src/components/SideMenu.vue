@@ -15,12 +15,13 @@
 </template>
   
 <script setup lang="ts">
-import { ref, onMounted, computed, watch, watchEffect} from 'vue';
+import { ref, onMounted, computed, watch, toRaw, watchEffect} from 'vue';
 import type { BlockNoteEditor, Block} from '@blocknote/core';
 import type { DeepReadonly } from 'vue';
 import DragIcon from './icons/DragIcon.vue';
 import PlusIcon from './icons/PlusIcon.vue';
 import { CustomBlockSchema } from './blockSchema';
+import { addBlockMonkeyPatch } from './monkeyPatchAddBlock';
 
 
 type TSideMenuProps = {
@@ -85,9 +86,9 @@ watch(showSideMenuSelector,
 )
 
 
-
 const addBlock = () => {
-    editor.sideMenu.addBlock();
+    // monkey patching the addBlock method to account for 'atomic' node (see tiptap docs about dynamic views )
+    addBlockMonkeyPatch.bind(toRaw(editor.sideMenu.sideMenuView))()
 };
 
 const blockDragStart = (event: DragEvent) => {

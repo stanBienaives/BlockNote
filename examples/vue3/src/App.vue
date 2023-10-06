@@ -16,7 +16,6 @@ import EditorView from './components/EditorView.vue';
 const initialContent = ref<string>(localStorage.getItem('blocknote') || '<p> Empty </p>')
 
 const onContentChange = (html: string) => {
-  console.log('content changed', html)
   localStorage.setItem('blocknote', html);
 }
 

@@ -17,30 +17,31 @@
     </textarea>
 </template>
   
-<script setup lang="ts">
+<script setup lang="ts" generic="BSchema extends BlockSchema = DefaultBlockSchema">
 import { ref, onMounted, defineProps, watch, computed, shallowRef } from 'vue';
-import { Block, BlockNoteEditor} from "@blocknote/core";
+import { BaseSlashMenuItem, Block, BlockNoteEditor} from "@blocknote/core";
 import SideMenu from './SideMenu.vue';
 import FormattingToolbar from './FormattingToolbar.vue';
 import SlashMenu from './SlashMenu.vue';
 import "@blocknote/core/style.css";
 import EditorContentWithSlots from './EditorContentWithSlots.vue';
 import { useBlockNote } from '../composables/useBlockNote'
-import { insertImage} from './ImageBlock'
-import {customSchema, CustomBlockSchema } from './blockSchema'
-import { getDefaultSlashMenuItems } from "@blocknote/core";
-import { insertImageWithCaption } from './ImageWithCaption';
+// import {customSchema, CustomBlockSchema } from './blockSchema'
+import { getDefaultSlashMenuItems, BlockSchema, DefaultBlockSchema } from "@blocknote/core";
+import { cleanHtml } from './cleanHtml';
 
-const {editable, onContentChange, initialContent} = defineProps<{
+const {editable, onContentChange, initialContent, customSchema, additionalSlashMenuItems} = defineProps<{
   editable: boolean,
   onContentChange: (string: string) => void,
   initialContent: string,
+  customSchema: BSchema,
+  additionalSlashMenuItems: BaseSlashMenuItem<BSchema>[],
 }>()
 
 const root = ref(null);
-const blocks = ref<Block<CustomBlockSchema>[]>();
+const blocks = ref<Block<BSchema>[]>();
 // Shallow ref is used to avoid typescript errors (ts(7056)) on using DeepReadonly
-const editor = shallowRef<BlockNoteEditor<CustomBlockSchema> | null>(null);
+const editor = shallowRef<BlockNoteEditor<BSchema> | null>(null);
 const html = ref<string>("");
 
 const cleanBlocks = computed(() => {
@@ -48,46 +49,11 @@ const cleanBlocks = computed(() => {
 })
 
 
-function removeClassAttributesUsingDOM(html: string) : string {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, 'text/html');
-    
-    const allElementsWithClass = doc.querySelectorAll('[class]');
-    allElementsWithClass.forEach(el => el.removeAttribute('class'));
-
-    return doc.body.innerHTML;
-}
-
-function removeTrailingEmptyParagraphs(html: string): string {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, 'text/html');
-    
-    const children = Array.from(doc.body.children);
-    let removed = false;
-
-    for (let i = children.length - 1; i >= 0; i--) {
-        const child = children[i] as HTMLElement; // Type cast to HTMLElement
-        if (child.tagName === 'P' && !child.textContent?.trim()) {
-            child.remove();
-            removed = true;
-        } else if (removed) {
-            break;
-        }
-    }
-
-    return doc.body.innerHTML;
-}
-
-
-function cleanHtml(html: string) : string{
-    return removeTrailingEmptyParagraphs(removeClassAttributesUsingDOM(html));
-}
-
 // watch(initialContent, async (value) => {
 // })
 
 onMounted(async () => {
-    editor.value = useBlockNote({
+    editor.value = useBlockNote<BSchema>({
       onEditorContentChange: async (editor) => {
         blocks.value = editor.topLevelBlocks;
         onContentChange(await editor.blocksToHTML(editor.topLevelBlocks))
@@ -99,8 +65,7 @@ onMounted(async () => {
       blockSchema: customSchema,
       slashMenuItems: [
         ...getDefaultSlashMenuItems(customSchema),
-        insertImage,
-        insertImageWithCaption
+        ...additionalSlashMenuItems
       ],
       domAttributes: {
         editor: {
@@ -110,8 +75,6 @@ onMounted(async () => {
     })!;
     const blocksFromHtml = await editor.value?.HTMLToBlocks(initialContent);
     editor.value?.insertBlocks(blocksFromHtml, editor.value.topLevelBlocks[0]);
-
-    // const htmlStored = localStorage.getItem('blocknote') || '<p> Empty </p>';
 });
 </script>
 

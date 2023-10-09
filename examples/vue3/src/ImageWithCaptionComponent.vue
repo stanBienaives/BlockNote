@@ -18,7 +18,7 @@
 //   import { nodeViewProps, NodeViewWrapper } from '@tiptap/vue-3'
 import { NodeViewContent } from '@tiptap/vue-3';
 import { computed } from 'vue';
-import { InlineContent } from './VueBlockSpec';
+import { InlineContent } from './components/VueBlockSpec';
 
 
 const { src } = defineProps<{

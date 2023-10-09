@@ -8,20 +8,6 @@ import { ImageBlock } from '../components/ImageBlock'
 
 import { Plugin } from 'prosemirror-state';
 
-const confirmDeletePlugin = new Plugin({
-  filterTransaction: (transaction, state) => {
-    if (isDeletionOfProtectedNode(transaction)) {
-      return window.confirm('Are you sure you want to delete this?');
-    }
-    return true;  // Allow all other transactions to proceed
-  },
-});
-
-
-function isDeletionOfProtectedNode(transaction) {
- console.log('check for deletion')
- return 
-}
 
 
 class BlockNoteEditorVue<T extends BlockSchema = DefaultBlockSchema> extends BlockNoteEditor<T> {

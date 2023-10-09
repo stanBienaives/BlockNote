@@ -2,17 +2,16 @@
 
 //@ts-ignore
 import { defaultProps, defaultBlockSchema } from "@blocknote/core";
-import { createVueBlockSpec } from "./VueBlockSpec";
+import { createVueBlockSpec } from "./components/VueBlockSpec";
 import { h } from 'vue'
 //@ts-ignore
-import ImageWithCaptionComponent from './ImageWithCaptionComponent.vue'
+import ImageComponent from './ImageComponent.vue'
 import type { BaseSlashMenuItem} from '@blocknote/core'
 import type { CustomBlockSchema } from "./blockSchema";
 
 
-
-export const ImageWithCaptionBlock = createVueBlockSpec({
-  type: 'imageWithCaptionComponent',
+export const ImageBlock = createVueBlockSpec({
+  type: 'imageComponent',
   propSchema: {
     ...defaultProps, 
     src: {
@@ -22,13 +21,13 @@ export const ImageWithCaptionBlock = createVueBlockSpec({
       default: "image",
     },
   },
-  containsInlineContent: true,
-  render: ({node}) => h(ImageWithCaptionComponent, node.attrs),
+  containsInlineContent: false,
+  render: ({node}) => h(ImageComponent, node.attrs),
 });
 
 
-export const insertImageWithCaption : BaseSlashMenuItem<CustomBlockSchema> = {
-  name: "Insert Image With caption",
+export const insertImage : BaseSlashMenuItem<CustomBlockSchema> = {
+  name: "Insert Image",
   execute: (editor) => {
     const src = null;
     const alt = null;
@@ -36,7 +35,7 @@ export const insertImageWithCaption : BaseSlashMenuItem<CustomBlockSchema> = {
     editor.insertBlocks(
       [
         {
-          type: "imageWithCaptionComponent",
+          type: "imageComponent",
           props: {
             src: src || `https://picsum.photos/seed/${randomWord}/200/300`,
             alt: alt || "image",
